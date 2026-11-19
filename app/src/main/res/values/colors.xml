@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="capri_bg">#12121F</color>
+    <color name="capri_accent">#FF2E88</color>
+    <color name="capri_text">#F2F2F7</color>
+</resources>

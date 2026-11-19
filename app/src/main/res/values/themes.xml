@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Capri" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/capri_bg</item>
+        <item name="android:textColorPrimary">@color/capri_text</item>
+        <item name="colorPrimary">@color/capri_bg</item>
+        <item name="colorPrimaryDark">@color/capri_bg</item>
+        <item name="colorAccent">@color/capri_accent</item>
+        <item name="android:statusBarColor">@color/capri_bg</item>
+        <item name="android:navigationBarColor">@color/capri_bg</item>
+    </style>
+</resources>

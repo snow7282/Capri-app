@@ -1,0 +1,51 @@
+// OPTIONAL + UNTESTED: run the model inside the app, no Termux needed.
+//
+// Based on the README of the Llamatik library (MIT licence, "fully offline inference via llama.cpp").
+// I could not compile or test this, so treat it as a starting point:
+//   - Check the exact package name for LlamaBridge in the Llamatik README and fix the import.
+//   - Check the latest version number on Maven Central.
+//   - It needs the model file inside the phone's storage, e.g. copy capri.gguf into the app's files folder.
+//
+// STEPS
+// 1) In app/build.gradle.kts add:
+//        implementation("com.llamatik:library:1.7.0")
+// 2) Rename this file to EmbeddedEngine.kt and put it in app/src/main/java/com/capri/app/
+// 3) In Brain.kt replace:
+//        val engine: LlmEngine = LlamaServerEngine { Prefs.serverUrl }
+//    with:
+//        val engine: LlmEngine = EmbeddedEngine { File(appCtx.filesDir, "capri.gguf").absolutePath }
+// 4) Put capri.gguf at: /data/data/com.capri.app/files/capri.gguf
+//    (easiest: add a file picker that copies it there, or use Android Studio's Device Explorer for a first test).
+//
+// Notes: 6 GB RAM is tight. Keep the context small, and expect the app to feel heavy.
+
+package com.capri.app
+
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.io.IOException
+// import com.llamatik.library.platform.LlamaBridge   // <- verify this import from the Llamatik README
+
+class EmbeddedEngine(private val modelPath: () -> String) : LlmEngine {
+    private var loaded = false
+
+    override suspend fun ping(): Boolean = loaded
+
+    override suspend fun chat(
+        messages: List<ChatMsg>,
+        maxTokens: Int,
+        temperature: Float
+    ): Result<String> = withContext(Dispatchers.Default) {
+        runCatching {
+            // if (!loaded) loaded = LlamaBridge.initGenerateModel(modelPath())
+            if (!loaded) throw IOException("Embedded model not loaded (finish the setup in this file first)")
+
+            // val prompt = LlamaBridge.applyChatTemplate(
+            //     messages = messages.map { it.role to it.content },
+            //     addAssistantPrefix = true
+            // ) ?: throw IOException("The GGUF has no chat template")
+            // LlamaBridge.generate(prompt)
+            ""
+        }
+    }
+}
